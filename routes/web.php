@@ -36,3 +36,13 @@ Route::get('/math', 'MainController@math');
 Route::get('/sum', 'MainController@summary');
 
 Route::get('/gethash', 'MainController@GetCoinsHash');
+
+Route::get('/checkcoins', 'MainController@CheckCoinsAlg');
+
+Route::get('/addvideo', 'MainController@GetAddVideoCard')->name('addvideo');
+
+Route::post('/addvideo', 'MainController@PostAddVideoCard');
+
+Route::get('/index', 'MainController@index')->name('main');
+
+Route::post('/postindex', 'MainController@postindex');

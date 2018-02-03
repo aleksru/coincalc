@@ -14,4 +14,9 @@ class Algoritm extends Model
     {
         return $this->hasMany('App\Models\Coin');
     }
+
+    public function hashrates()
+    {
+        return $this->belongsToMany('App\Models\Videocard', 'hashrates')->withPivot('userhash');
+    }
 }

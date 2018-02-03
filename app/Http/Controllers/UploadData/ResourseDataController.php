@@ -28,7 +28,6 @@ class ResourseDataController extends BaseDataController
         	}
         }
         echo $semafor.'<br>';
-        $icloe = 0;
         for($i = 0; $i <= $semafor; $i++){
         	debug(Cache::get($i));
 			try{

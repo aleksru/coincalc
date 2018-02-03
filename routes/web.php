@@ -34,3 +34,5 @@ Route::group(['prefix' => '/test','namespace' => 'UploadData'], function() {
 Route::get('/math', 'MainController@math');
 
 Route::get('/sum', 'MainController@summary');
+
+Route::get('/gethash', 'MainController@GetCoinsHash');

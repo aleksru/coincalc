@@ -6,6 +6,14 @@ use Illuminate\Http\Request;
 use App\Models\Coin;
 use App\Models\Algoritm;
 use App\Models\DataCoin;
+use App\Models\Hashrate;
+use App\Models\Videocard;
+
+/*
+1 MH/s = 1,000 kH/s = 1,000,000 H/s
+1 GH/s = 1,000 MH/s = 1,000,000 kH/s
+1 TH/s = 1,000 GH/s = 1,000,000 MH/s = 1,000,000,000 kH/s = 1,000,000,000,000 H/s
+*/
 
 class MainController extends Controller
 {
@@ -41,6 +49,25 @@ class MainController extends Controller
 	    	debug($key->datacoin->coin->name);
 	    	//debug(Coin::find(119)->datacoin);
     	}
+
+
+
+    	return 1;
+    }
+
+    public function GetCoinsHash()
+    {
+
+    	$geth = Videocard::find(2)->hashrates;
+    	//echo Videocard::find(2)->name.'<br>';
+    	//debug($geth);
+
+    	$getnumb = Videocard::find(2);
+    	debug($getnumb->hashrates);
+    	foreach($getnumb->hashrates as $rate){
+    		debug($rate->pivot->userhash);
+    	}
+
 
 
 

@@ -3,6 +3,9 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<title>{{ $title or '' }}</title>
+  <meta name="csrf-token" content="{{ csrf_token() }}">
+  <script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
+  <script type="text/javascript" src="js/query.js"></script>
 
 </head>
 
@@ -19,31 +22,17 @@
     
    </select></p>
 
-   	<p><select size="7" name="algoritm">
-	@foreach ($algoritm as $a)
-  	<option value={{ $a->id }}>{{ $a->name }}</option>
-	@endforeach
-    
-   </select></p>
 
-   <input type="number" name="numb"> HS<Br>
+    @foreach ($algoritm as $a)
+      {{$a->algname}}<Br>
+    <input type="number" name= algenc/{{ $a->algid }}/{{ $a->encid }} value=''>{{$a->encname}}<Br><Br>
+    @endforeach
 
-   	<p><select size="7" name="hash">
+    <input type="submit">
 
-  	<option value=1>TH/s</option>
-  	<option value=2>GH/s</option>
-  	<option value=3>MH/s</option>
-  	<option value=4>kH/s</option>
-  	<option value=5>H/s</option>
-    
-    </select></p>
-
-
-
-
-	
-	<input type="submit" value="Рассчитать">
 </form>
+
+<div id='res'></div>
 
 		
 </body>

@@ -46,3 +46,5 @@ Route::post('/addvideo', 'MainController@PostAddVideoCard');
 Route::get('/index', 'MainController@index')->name('main');
 
 Route::post('/postindex', 'MainController@postindex');
+
+Route::post('/ajax', 'MainController@ajax');

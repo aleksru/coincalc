@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Models\Coin;
 use App\Models\Algoritm;
 use App\Models\DataCoin;
@@ -17,52 +18,36 @@ class MainController extends Controller
     public function index()
     {   
         $msg = '';
+        $AlgEnc = DB::table('algoritms')->join('encryptrates', 'algoritms.encryptrate_id', '=', 'encryptrates.id')->select('algoritms.name as algname','algoritms.id as algid','encryptrates.id as encid' ,'encryptrates.name as encname')->get();
+        debug($AlgEnc);
+        //debug(Videocard::all());
 
-        return view('index', ['videocard' => Videocard::all(), 'title' => 'Главная', 'algoritm' => Algoritm::all(), 'msg' => $msg]);
+        return view('index', ['videocard' => Videocard::all(), 'title' => 'Главная', 'algoritm' => $AlgEnc, 'msg' => $msg]);
     }
     
-    public function postindex(Request $request)
-    {
-
+    public function postindex(Request $request){
         debug($request);
-
-        $finnalyUserHash;
-        $finallyAlgoritm;
-
         if(isset($request->videocart)){
             $gethash = Videocard::find($request->videocart);
-        }
-
-        if(isset($request->algoritm)){
-            $finallyAlgoritm = Algoritm::find($request->algoritm)->id;
-        }
-
-        if(isset($request->numb)&&isset($request->hash)){
-            $finnalyUserHash = $this->math($request->numb, $request->hash);
-        }
-
-        if(!empty($finnalyUserHash)&&!empty($finallyAlgoritm)){
-            return $this->summary($finnalyUserHash, $finallyAlgoritm);
-        }
-
-        if(!empty($gethash)){
-            if(!empty($finallyAlgoritm)){
-                $hashrate = Hashrate::where('videocard_id', $gethash->id)->where('algoritm_id', $finallyAlgoritm)->get();
-                if(!isset($hashrate[0])){
-                    return 1;
-                }
-                return $this->summary($hashrate[0]->userhash, $finallyAlgoritm);
-            }
-
             foreach($gethash->hashrates as $rate){
-                echo '<h1>'.$rate->name.'</h1>'.'<br>'; 
-                $this->summary(!empty($finnalyUserHash)?$finnalyUserHash:$rate->pivot->userhash, $rate->id);
+                echo '<h1>'.$rate->name.'</h1>'.'<br>';
+                dump($this->summary($rate->pivot->userhash, $rate->id));
             }
         }
+        foreach ($request->all() as $key => $value) {
+           if(substr($key, 0, 6) == 'algenc' && !empty($value)){
+                $key = explode("/", $key);
+                dump($this->summary($this->math($value, $key[2]), $key[1]));
 
-        return 1;
+           }
+        }
+
     }
 
+    public function ajax(Request $request)
+    {
+        return $this->postindex($request);
+    }
 
 
     public function math($hash, $numb)
@@ -71,9 +56,14 @@ class MainController extends Controller
     	// $h = 3600 / 14.3602;
     	// $res1 = 2.91*$b*$h*24;
     	// $res1 = round($res1, 4);
+        /*
+1 MH/s = 1,000 kH/s = 1,000,000 H/s
+1 GH/s = 1,000 MH/s = 1,000,000 kH/s
+1 TH/s = 1,000 GH/s = 1,000,000 MH/s = 1,000,000,000 kH/s = 1,000,000,000,000 H/s
+*/
 
         if($numb != 5){
-            if($numb == 4){$request->numb = $request->numb * 1000;}
+            if($numb == 4){$hash = $hash * 1000;}
             if($numb == 3){$hash = $hash * 1000000;}
             if($numb == 2){$hash = $hash * 1000000 * 1000;}
             if($numb == 1){$hash = $hash * 1000000000000;}
@@ -84,21 +74,23 @@ class MainController extends Controller
 
     public function summary($userhash, $algoritm_id)
     {	
- 
+        debug($userhash);
     	$arr = Algoritm::find($algoritm_id)->coin;
+        $result = [];
 
     	foreach($arr as $key){
     		$b = ($userhash)/($key->datacoin->nethash);
 	    	$h = 3600 / $key->datacoin->block_time;
-	    	$res1 = $key->datacoin->block_reward *$b*$h*24;
-	    	$res1 = round($res1, 5);
-	    	echo $key->datacoin->coin->name.' '.$res1.'<br>';
+	    	//$res1 = $key->datacoin->block_reward *$b*$h*24;
+	    	//$res1 = round($res1, 5);
+            $result[$key->datacoin->coin->name] = round($key->datacoin->block_reward *$b*$h*24, 5);
+	    	//echo $key->datacoin->coin->name.' '.$res1.'<br>';
 
     	}
 
 
 
-    	return 1;
+    	return $result;
     }
 
     public function GetCoinsHash()
@@ -123,7 +115,7 @@ class MainController extends Controller
 
     public function CheckCoinsAlg()
     {	
-    	$allaltm = Algoritm::all();
+    	$allaltm = App\Models\Algoritm::all();
     	
     	foreach($allaltm as $alg){
     		echo '<h1>'.$alg->name.'</h1>'.'<br>'.'<br>';

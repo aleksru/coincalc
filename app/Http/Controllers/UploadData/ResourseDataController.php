@@ -27,9 +27,9 @@ class ResourseDataController extends BaseDataController
         		}
         	}
         }
-        echo $semafor.'<br>';
+        //echo $semafor.'<br>';
         for($i = 0; $i <= $semafor; $i++){
-        	debug(Cache::get($i));
+        	//debug(Cache::get($i));
 			try{
 				if(Cache::get($i)){
 					$DataCoin = $this->DownloanJson(Cache::get($i));
@@ -48,7 +48,7 @@ class ResourseDataController extends BaseDataController
 	      	$savedata->block_reward = $DataCoin['block_reward'];
 	      	$savedata->nethash = $DataCoin['nethash'];
 	      	$savedata->save();
-	      	dump($savedata);
+	      	//dump($savedata);
 	    }
 	    Cache::flush();
 

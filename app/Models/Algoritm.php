@@ -19,4 +19,9 @@ class Algoritm extends Model
     {
         return $this->belongsToMany('App\Models\Videocard', 'hashrates')->withPivot('userhash');
     }
+
+    public function encrypt()
+    {
+        return $this->belongsTo('App\Models\Encryptrate', 'encryptrate_id');
+    }
 }

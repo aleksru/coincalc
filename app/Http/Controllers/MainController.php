@@ -20,66 +20,80 @@ class MainController extends Controller
 
         return view('index', ['videocard' => Videocard::all(), 'title' => 'Главная', 'algoritm' => Algoritm::all(), 'msg' => $msg]);
     }
+    
     public function postindex(Request $request)
     {
 
         debug($request);
-        $gethash = Videocard::find($request->videocart);
+
+        $finnalyUserHash;
+        $finallyAlgoritm;
+
+        if(isset($request->videocart)){
+            $gethash = Videocard::find($request->videocart);
+        }
+
         if(isset($request->algoritm)){
-            $alg = Algoritm::find($request->algoritm);
-            $hash = Hashrate::where('videocard_id', $gethash->id)->where('algoritm_id', $alg->id)->get();
-            if(!isset($hash[0])){
-                return 1;
+            $finallyAlgoritm = Algoritm::find($request->algoritm)->id;
+        }
+
+        if(isset($request->numb)&&isset($request->hash)){
+            $finnalyUserHash = $this->math($request->numb, $request->hash);
+        }
+
+        if(!empty($finnalyUserHash)&&!empty($finallyAlgoritm)){
+            return $this->summary($finnalyUserHash, $finallyAlgoritm);
+        }
+
+        if(!empty($gethash)){
+            if(!empty($finallyAlgoritm)){
+                $hashrate = Hashrate::where('videocard_id', $gethash->id)->where('algoritm_id', $finallyAlgoritm)->get();
+                if(!isset($hashrate[0])){
+                    return 1;
+                }
+                return $this->summary($hashrate[0]->userhash, $finallyAlgoritm);
             }
-            return $this->summary($hash[0]->userhash, $alg->id);
-        }
-        debug($gethash);
 
-        foreach($gethash->hashrates as $rate){
-            //echo $rate->pivot->userhash.'<br>';
-            echo '<h1>'.$rate->name.'</h1>'.'<br>';
-            debug($rate);
-            $this->summary($rate->pivot->userhash, $rate->id);
+            foreach($gethash->hashrates as $rate){
+                echo '<h1>'.$rate->name.'</h1>'.'<br>'; 
+                $this->summary(!empty($finnalyUserHash)?$finnalyUserHash:$rate->pivot->userhash, $rate->id);
+            }
         }
-
 
         return 1;
     }
 
 
 
-    public function math()
+    public function math($hash, $numb)
     {
     	// $b = (23.3*1e6)/(1.7856257368148E+14);
     	// $h = 3600 / 14.3602;
     	// $res1 = 2.91*$b*$h*24;
     	// $res1 = round($res1, 4);
 
-    	$b = (550)/(50287158);
-    	$h = 3600 / 511;
-    	$res1 = 12.5*$b*$h*24;
-    	$res1 = round($res1, 7);
-    	return $res1;
+        if($numb != 5){
+            if($numb == 4){$request->numb = $request->numb * 1000;}
+            if($numb == 3){$hash = $hash * 1000000;}
+            if($numb == 2){$hash = $hash * 1000000 * 1000;}
+            if($numb == 1){$hash = $hash * 1000000000000;}
+        }
+    	return $hash;
     }
 
 
     public function summary($userhash, $algoritm_id)
     {	
+ 
     	$arr = Algoritm::find($algoritm_id)->coin;
-    	debug($arr);
-    	//echo Algoritm::find($algoritm_id)->name.'<br>'.'<br>';
-    	//echo 'userhash '.$userhash.'<br>'.'<br>';
 
     	foreach($arr as $key){
-    		//dump($key->datacoin);
     		$b = ($userhash)/($key->datacoin->nethash);
 	    	$h = 3600 / $key->datacoin->block_time;
 	    	$res1 = $key->datacoin->block_reward *$b*$h*24;
 	    	$res1 = round($res1, 5);
-            //debug($key->datacoin->coin->name);
 	    	echo $key->datacoin->coin->name.' '.$res1.'<br>';
-	    	//debug($key->datacoin->coin->name);
-	    	//debug(Coin::find(119)->datacoin);
+
     	}
 
 
@@ -153,7 +167,7 @@ class MainController extends Controller
         }
 
         echo $request->numb;
-        Hashrate::create(['algoritm_id' => $request->algoritm, 'videocard_id' => $request->videocart, 'userhash' => $request->numb]); 
+        Hashrate::firstOrCreate(['algoritm_id' => $request->algoritm, 'videocard_id' => $request->videocart, 'userhash' => $request->numb]); 
 
 
     	return 1;

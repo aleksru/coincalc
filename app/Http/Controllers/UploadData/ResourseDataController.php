@@ -42,13 +42,11 @@ class ResourseDataController extends BaseDataController
 	      	//debug(['coin_id' => $DataCoin['id'], 'block_time' => (float)$DataCoin['block_time'],'block_reward' => $DataCoin['block_reward'], 'nethash' => $DataCoin['nethash']]);
 	      	
 	      	//$data = ['coin_id' => $DataCoin['id'], 'block_time' => (float)$DataCoin['block_time'],'block_reward' => $DataCoin['block_reward'], 'nethash' => $DataCoin['nethash']];
+	      	//debug(['coin_id' => $DataCoin['id'], 'coin_id' => $DataCoin['id']],['block_time' => (float)$DataCoin['block_time'],'block_reward' => $DataCoin['block_reward'], 'nethash' => $DataCoin['nethash']]);
 
-	        $savedata = DataCoin::firstOrNew(['coin_id' => $DataCoin['id']]);
-	      	$savedata->block_time = (float)$DataCoin['block_time'];
-	      	$savedata->block_reward = $DataCoin['block_reward'];
-	      	$savedata->nethash = $DataCoin['nethash'];
-	      	$savedata->save();
-	      	//dump($savedata);
+	      	if($DataCoin['id']){
+	      		DataCoin::updateOrCreate(['coin_id' => $DataCoin['id'], 'coin_id' => $DataCoin['id']],['block_time' => (float)$DataCoin['block_time'],'block_reward' => $DataCoin['block_reward'], 'nethash' => $DataCoin['nethash']]);
+	      	}
 	    }
 	    Cache::flush();
 

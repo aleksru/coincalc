@@ -9,11 +9,16 @@ class BaseDataController extends Controller
 {
     protected function DownloanJson($url)
     {
+    	try{        
+    		$j = file_get_contents($url);
+        	$j = json_decode($j, true);
 
-        $j = file_get_contents($url);
-        $j = json_decode($j, true);
-        //debug($j);
+        	
+        }catch(\Exception $e){
+	        	return null;
+	    }
 
-        return $j;
+	    return $j;
+
     }
 }

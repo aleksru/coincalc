@@ -19,4 +19,25 @@ class Coin extends Model
   	{
     	return $this->hasOne('App\Models\DataCoin', 'coin_id', 'coin_id');
   	}
+
+    public function price()
+    {
+        return $this->hasMany('App\Models\PriceBittrex', 'coin_id', 'coin_id');
+    }
+
+    public function priceHitbtc()
+    {
+        return $this->hasMany('App\Models\PriceHitbtc', 'coin_id', 'coin_id');
+    }
+    
+    public function priceCriptopia()
+    {
+        return $this->hasMany('App\Models\PriceCriptopia', 'coin_id', 'coin_id');
+    }
+
+    public function priceYobit()
+    {
+        return $this->hasMany('App\Models\PriceYobit', 'coin_id', 'coin_id');
+    }
+
 }

@@ -48,3 +48,15 @@ Route::get('/index', 'MainController@index')->name('main');
 Route::post('/postindex', 'MainController@postindex');
 
 Route::post('/ajax', 'MainController@ajax');
+
+Route::get('/getresours', 'UploadData\ResourseDataController@UpWhatToMine');
+
+Route::get('/getbittrex', 'UploadData\DownBittrexController@downloadPrice');
+
+Route::get('/getyobit', 'UploadData\DownYobitController@downloadPrice');
+
+Route::get('/gethitbtc', 'UploadData\DownHitbtcController@downloadPrice');
+
+Route::get('/getcriptopia', 'UploadData\DownCriptopiaController@downloadPrice');
+
+Route::get('/getprices', 'PriceController@getPrices');

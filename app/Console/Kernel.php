@@ -5,6 +5,10 @@ namespace App\Console;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use App\Jobs\DownloadDataWhatToMine;
+use App\Jobs\DownloadDataBittrex;
+use App\Jobs\DownloadDataCriptopia;
+use App\Jobs\DownloadDataHitbtc;
+use App\Jobs\DownloadDataYobit;
 
 class Kernel extends ConsoleKernel
 {
@@ -26,8 +30,15 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')
+        //>after(function () {
+           // Задача завершена...
+        // });
         //          ->hourly();
-        $schedule->job(new DownloadDataWhatToMine)->dailyAt('19:51');
+        $schedule->job(new DownloadDataWhatToMine)->dailyAt('17:02')->withoutOverlapping();
+        $schedule->job(new DownloadDataBittrex)->hourlyAt(23)->withoutOverlapping();
+        $schedule->job(new DownloadDataCriptopia)->hourlyAt(25)->withoutOverlapping();
+        $schedule->job(new DownloadDataHitbtc)->hourlyAt(25)->withoutOverlapping();
+        $schedule->job(new DownloadDataYobit)->hourlyAt(28)->withoutOverlapping();
     }
 
     /**

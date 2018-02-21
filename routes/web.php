@@ -33,7 +33,7 @@ Route::group(['prefix' => '/test','namespace' => 'UploadData'], function() {
 
 Route::get('/math', 'MainController@math');
 
-Route::get('/sum', 'MainController@summary');
+Route::get('/sum', 'MainController@RecorsionByNull');
 
 Route::get('/gethash', 'MainController@GetCoinsHash');
 
@@ -46,6 +46,8 @@ Route::post('/addvideo', 'MainController@PostAddVideoCard');
 Route::get('/index', 'MainController@index')->name('main');
 
 Route::post('/postindex', 'MainController@postindex');
+
+Route::post('/posthash', 'MainController@PostGetHashAjax');
 
 Route::post('/ajax', 'MainController@ajax');
 

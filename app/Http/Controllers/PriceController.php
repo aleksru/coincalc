@@ -40,10 +40,10 @@ class PriceController extends Controller
 	public function getLastPrices()
     {	
 
-	   return ["priceBittrex" =>!$this->var->price->isEmpty()?$this->var->price[0]->Last:null,
+	   return collect(["priceBittrex" =>!$this->var->price->isEmpty()?$this->var->price[0]->Last:null,
 			"priceHitbtc" =>!$this->var->priceHitbtc->isEmpty()?$this->var->priceHitbtc[0]->Last:null,
 			"priceCriptopia" =>!$this->var->priceCriptopia->isEmpty()?$this->var->priceCriptopia[0]->Last:null,
-			"priceYobit" =>!$this->var->priceYobit->isEmpty()?$this->var->priceYobit[0]->Last:null];
+			"priceYobit" =>!$this->var->priceYobit->isEmpty()?$this->var->priceYobit[0]->Last:null]);
     }
 
    	public function getLowPrices()

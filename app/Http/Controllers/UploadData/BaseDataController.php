@@ -21,4 +21,12 @@ class BaseDataController extends Controller
 	    return $j;
 
     }
+
+    public function PriceUsdBtc()
+    {
+        $this->DownloanJson("https://api.coinmarketcap.com/v1/ticker/bitcoin/");
+
+
+        return dump($this->DownloanJson("https://api.coinmarketcap.com/v1/ticker/bitcoin/"));
+    }
 }

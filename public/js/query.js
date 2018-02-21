@@ -5,15 +5,42 @@ window.onload = function(){
   	}
 	});
 
-	$('form').submit(function (e) {
-    e.preventDefault();
-    var data = $('form').serializeArray();
-    $.ajax({
-        type: "POST",
-        url: 'ajax',
-        async: true,
-        data: data,
-        success: function (msg) {
-			$('#res').html(msg);},
-        });});
+	$('form#postindex').submit(function (e) {
+        e.preventDefault();
+        var data = $('form#postindex').serializeArray();
+        $('#res').html("");
+        $.ajax({
+            type: "POST",
+            url: 'ajax',
+            async: true,
+            data: data,
+            success: function (msg) {
+    			$('#res').html(msg);
+                $("#result").tablesorter();
+            },
+        });
+    });
+
+    $('form#videocart').change(function (e) {
+        e.preventDefault();
+        var data = $('form#videocart').serializeArray();
+        //$('.encrypt input').val('');
+        $.ajax({
+            type: "POST",
+            url: 'posthash',
+            async: true,
+            data: data,
+            success: function (msg) {
+                //$('#res').html(msg);
+                if(msg.length == 0){
+                    $('.encrypt input').val('');
+                }
+                $.each(msg, function(i, item){
+                    //console.log(item);
+                    //console.log($("input."+i).val(item));
+                    $('input.'+ i).val(item);
+                });
+            },
+        });
+    });
 };

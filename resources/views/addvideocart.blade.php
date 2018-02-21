@@ -26,7 +26,7 @@
     
    </select></p>
 
-   <input type="number" name="numb"> HS<Br>
+   <input type="number" step="any" name="numb"> HS<Br>
 
    	<p><select size="7" name="hash">
 

@@ -9,6 +9,7 @@ use App\Jobs\DownloadDataBittrex;
 use App\Jobs\DownloadDataCriptopia;
 use App\Jobs\DownloadDataHitbtc;
 use App\Jobs\DownloadDataYobit;
+use App\Jobs\DownloadPriceBtcUsd;
 
 class Kernel extends ConsoleKernel
 {
@@ -34,11 +35,11 @@ class Kernel extends ConsoleKernel
            // Задача завершена...
         // });
         //          ->hourly();
-        $schedule->job(new DownloadDataWhatToMine)->dailyAt('17:02')->withoutOverlapping();
-        $schedule->job(new DownloadDataBittrex)->hourlyAt(23)->withoutOverlapping();
-        $schedule->job(new DownloadDataCriptopia)->hourlyAt(25)->withoutOverlapping();
-        $schedule->job(new DownloadDataHitbtc)->hourlyAt(25)->withoutOverlapping();
-        $schedule->job(new DownloadDataYobit)->hourlyAt(28)->withoutOverlapping();
+        $schedule->job(new DownloadDataWhatToMine)->dailyAt('08:31')->withoutOverlapping();
+        $schedule->job(new DownloadDataBittrex)->hourlyAt(31)->withoutOverlapping();
+        $schedule->job(new DownloadDataCriptopia)->hourlyAt(31)->withoutOverlapping();
+        $schedule->job(new DownloadDataHitbtc)->hourlyAt(31)->withoutOverlapping();
+        $schedule->job(new DownloadDataYobit)->hourlyAt(31)->withoutOverlapping();
     }
 
     /**

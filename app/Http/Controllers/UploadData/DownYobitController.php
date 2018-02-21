@@ -34,16 +34,18 @@ class DownYobitController extends BaseDataController
             }
             $semafor++;
     	}
-
-        foreach($arrQueryes as $res){
-            $ListCoins = $this->DownloanJson($res);
-            foreach ($ListCoins as $key => $value) {
-                $getcoin = Coin::where("tag", substr($key, 0, -4))->get();
-                    PriceYobit::updateOrCreate(['coin_id'=>$getcoin[0]->coin_id, 'coin_id'=>$getcoin[0]->coin_id], ['High'=>$value['high'], 'Low'=>$value['low'],  'Last'=>$value['last']]);
+        if($arrQueryes){
+            foreach($arrQueryes as $res){
+                $ListCoins = $this->DownloanJson($res);
+                if($ListCoins){
+                    foreach ($ListCoins as $key => $value) {
+                        $getcoin = Coin::where("tag", substr($key, 0, -4))->get();
+                            PriceYobit::updateOrCreate(['coin_id'=>$getcoin[0]->coin_id, 'coin_id'=>$getcoin[0]->coin_id], ['High'=>$value['high'], 'Low'=>$value['low'],  'Last'=>$value['last']]);
+                    }
+                    sleep(3);
+                }
             }
-            sleep(3);
         }
-
     	return 1;
     }
 

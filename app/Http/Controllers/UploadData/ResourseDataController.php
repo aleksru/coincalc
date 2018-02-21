@@ -32,9 +32,16 @@ class ResourseDataController extends BaseDataController
         	//debug(Cache::get($i));
 			try{
 				if(Cache::get($i)){
-					$DataCoin = $this->DownloanJson(Cache::get($i));
+					if($DataCoin = $this->DownloanJson(Cache::get($i))){
+						if($DataCoin['id']){
+	      					DataCoin::updateOrCreate(['coin_id' => $DataCoin['id'], 'coin_id' => $DataCoin['id']],['block_time' => (float)$DataCoin['block_time'],'block_reward' => $DataCoin['block_reward'], 'nethash' => $DataCoin['nethash']]);
+	      					Cache::forget($i);
+	      				}
+					}else{
+						sleep(10);
+	        			continue;
+					}
 				}
-				Cache::forget($i);
 	        }catch(\Exception $e){
 	        		sleep(10);
 	        		continue;
@@ -44,9 +51,9 @@ class ResourseDataController extends BaseDataController
 	      	//$data = ['coin_id' => $DataCoin['id'], 'block_time' => (float)$DataCoin['block_time'],'block_reward' => $DataCoin['block_reward'], 'nethash' => $DataCoin['nethash']];
 	      	//debug(['coin_id' => $DataCoin['id'], 'coin_id' => $DataCoin['id']],['block_time' => (float)$DataCoin['block_time'],'block_reward' => $DataCoin['block_reward'], 'nethash' => $DataCoin['nethash']]);
 
-	      	if($DataCoin['id']){
-	      		DataCoin::updateOrCreate(['coin_id' => $DataCoin['id'], 'coin_id' => $DataCoin['id']],['block_time' => (float)$DataCoin['block_time'],'block_reward' => $DataCoin['block_reward'], 'nethash' => $DataCoin['nethash']]);
-	      	}
+	      	// if($DataCoin['id']){
+	      	// 	DataCoin::updateOrCreate(['coin_id' => $DataCoin['id'], 'coin_id' => $DataCoin['id']],['block_time' => (float)$DataCoin['block_time'],'block_reward' => $DataCoin['block_reward'], 'nethash' => $DataCoin['nethash']]);
+	      	// }
 	    }
 	    Cache::flush();
 

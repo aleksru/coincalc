@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+//use Illuminate\Support\Facades\DB;
 use App\Models\Coin;
 use App\Models\PriceBittrex;
 use App\Models\PriceCriptopia;
@@ -68,4 +68,5 @@ class PriceController extends Controller
     {
         return $this->getMaxPrices()->max();
     }
+
 }

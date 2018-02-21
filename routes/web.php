@@ -51,8 +51,6 @@ Route::post('/posthash', 'MainController@PostGetHashAjax');
 
 Route::post('/ajax', 'MainController@ajax');
 
-Route::get('/getresours', 'UploadData\ResourseDataController@UpWhatToMine');
-
 Route::get('/getbittrex', 'UploadData\DownBittrexController@downloadPrice');
 
 Route::get('/getyobit', 'UploadData\DownYobitController@downloadPrice');

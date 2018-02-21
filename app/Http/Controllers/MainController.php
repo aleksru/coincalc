@@ -8,7 +8,7 @@ use App\Models\Videocard;
 use App\Models\Algoritm;
 use App\Http\Controllers\PriceController;
 //use Illuminate\Support\Facades\Cache;
-//use App\Models\Coin;
+use App\Models\Coin;
 //use App\Models\PriceBittrex;
 //use App\Models\DataCoin;
 use App\Models\Hashrate;
@@ -17,52 +17,26 @@ use App\Models\Hashrate;
 
 class MainController extends Controller
 {
+    protected $price_btc;
+
+    public function __construct()
+    {
+        $this->price_btc = Coin::where('tag', 'BTC')->get()[0]->price[0]->Last;
+    }
 
     public function index()
     {
         $msg = '';
         $AlgEnc = DB::table('algoritms')->join('encryptrates', 'algoritms.encryptrate_id', '=', 'encryptrates.id')->select('algoritms.name as algname','algoritms.id as algid','encryptrates.id as encid' ,'encryptrates.name as encname')->get();
-        //debug($AlgEnc);
-        //debug(Videocard::all());
-        //debug(Videocard::find(2)->hashrates);
+
         return view('index', ['videocard' => Videocard::all(), 'title' => 'Главная', 'algoritm' => $AlgEnc, 'msg' => $msg]);
     }
     
     public function postindex(Request $request){
-        //debug($request);
-        $price_btc = 11500;
-        // if(isset($request->videocart)){
-        //     $gethash = Videocard::find($request->videocart);
-        //     $arrayColl = [];
-        //     foreach($gethash->hashrates as $rate){
-        //         foreach ($this->summary($rate->pivot->userhash, $rate->id) as $key => $value) {
-        //             $arrayColl[] = collect([
-        //                 'coin'=>$key,'rate' => $value[0], 
-        //                 'encrypt'=> $rate->name, 
-        //                 'last_max_price' => $value[1]->getLastPrices()->max(),
-        //                 'avg price' => $value[1]->getAvgPrices(), 
-        //                 'avg profit' => $value[0]*$value[1]->getAvgPrices()*$price_btc, 
-        //                 //'max price' => $value[1]->getOneMaxPrice(), 
-        //                 'max_24_profit' => $value[1]->getOneMaxPrice()*$value[0]*$price_btc,
-        //                 'max_last_profit' => $value[1]->getLastPrices()->max()*$value[0]*$price_btc,
-        //                 'max_last_profit_market'=> $value[1]->getLastPrices()->search($value[1]->getLastPrices()->max(), true)
-        //             ]);
-        //             //dump($value[1]->getLastPrices());
-        //         }
-        //     }
-        //     $arrayColl = collect($arrayColl)->reject(function ($value, $key){
-        //         return !$value['max_24_profit'] && !$value['avg profit'];
-        //     })->sortByDesc(function ($value, $key) {
-        //           return $value->get('max_last_profit');
-        //         });
-        //     //dump($arrayColl);
-        //     //$arrayColl = $arrayColl->sortByDesc(function ($value, $key) {
-        //           //return $value->get('max profit');
-        //     //});
-        //     dump($arrayColl);
 
-        // }
+        $price_btc = $this->price_btc;
         $allCol = [];
+
         foreach ($request->all() as $key => $value) {
            if(substr($key, 0, 6) == 'algenc' && !empty($value)){
                 $key = explode("/", $key);
@@ -112,11 +86,7 @@ class MainController extends Controller
                 }
             }
         }
-        // $res = [];
-        // $getRates = Videocard::find($request->videocart)->hashrates;
-        // foreach ($getRates as $key) {
-        //     $res[$key->id] = round($this->math($key->pivot->userhash, $key->encryptrate_id, $reverse = True), 1);
-        // }
+
 
         return $res;
     }
@@ -190,9 +160,7 @@ class MainController extends Controller
     	foreach($arr as $key){
     		$b = ($userhash)/($key->datacoin->nethash);
 	    	$h = 3600 / $key->datacoin->block_time;
-            //$price = $key->price;
-	    	//$res1 = $key->datacoin->block_reward *$b*$h*24;
-	    	//$res1 = round($res1, 5);
+
             $updateData = $key->datacoin->updated_at;
             $updateYMD = explode( "-", (explode(' ', $updateData))[0]);
             $updateH = explode( ":", (explode(' ', $updateData))[1]);
@@ -204,8 +172,6 @@ class MainController extends Controller
                 
             }
             
-	    	//echo $key->datacoin->coin->name.' '.$userhash.' '.$key->datacoin->nethash.' '.$key->datacoin->block_time.'<br>';
-
     	}
 
 
@@ -213,40 +179,40 @@ class MainController extends Controller
     	return $result;
     }
 
-    public function GetCoinsHash()
-    {
+    // public function GetCoinsHash()
+    // {
 
-    	$geth = Videocard::find(2)->hashrates;
-    	//echo Videocard::find(2)->name.'<br>';
-    	//debug($geth);
+    // 	$geth = Videocard::find(2)->hashrates;
+    // 	//echo Videocard::find(2)->name.'<br>';
+    // 	//debug($geth);
 
-    	$getnumb = Videocard::find(2);
-    	debug($getnumb->hashrates);
-    	foreach($getnumb->hashrates as $rate){
-    		debug($rate->pivot->userhash);
-    	}
-
-
+    // 	$getnumb = Videocard::find(2);
+    // 	debug($getnumb->hashrates);
+    // 	foreach($getnumb->hashrates as $rate){
+    // 		debug($rate->pivot->userhash);
+    // 	}
 
 
-    	return 1;
-    }
 
 
-    public function CheckCoinsAlg()
-    {	
-    	$allaltm = App\Models\Algoritm::all();
+    // 	return 1;
+    // }
+
+
+    // public function CheckCoinsAlg()
+    // {	
+    // 	$allaltm = App\Models\Algoritm::all();
     	
-    	foreach($allaltm as $alg){
-    		echo '<h1>'.$alg->name.'</h1>'.'<br>'.'<br>';
-    		foreach($alg->coin as $coin){
-    			echo $coin->name.'<br>';
-    			debug($coin->name);
-    		}
-    	}
+    // 	foreach($allaltm as $alg){
+    // 		echo '<h1>'.$alg->name.'</h1>'.'<br>'.'<br>';
+    // 		foreach($alg->coin as $coin){
+    // 			echo $coin->name.'<br>';
+    // 			debug($coin->name);
+    // 		}
+    // 	}
 
-    	return 1;
-    }
+    // 	return 1;
+    // }
 
 
     public function GetAddVideoCard($msg = '')

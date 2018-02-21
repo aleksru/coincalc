@@ -23,7 +23,7 @@ class DownHitbtcController extends BaseDataController
     			'Last'=>$ListCoins['last']]);
     		}
     	}
-    	
+    	$this->PriceUsdBtc((new PriceHitbtc));
 
 
 

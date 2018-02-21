@@ -9,6 +9,7 @@ window.onload = function(){
         e.preventDefault();
         var data = $('form#postindex').serializeArray();
         $('#res').html("");
+        $("#btn").attr('disabled',true);
         $.ajax({
             type: "POST",
             url: 'ajax',
@@ -16,6 +17,7 @@ window.onload = function(){
             data: data,
             success: function (msg) {
     			$('#res').html(msg);
+                $("#btn").removeAttr('disabled');
                 $("#result").tablesorter();
             },
         });

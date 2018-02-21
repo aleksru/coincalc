@@ -23,7 +23,7 @@ class DownCriptopiaController extends BaseDataController
     		}
     	}
     	
-
+        $this->PriceUsdBtc((new PriceCriptopia));
 
 
 

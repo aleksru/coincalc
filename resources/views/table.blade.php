@@ -1,4 +1,4 @@
-<table id="result">
+<br/><table id="result" >
 	<thead>
 	 <tr>
 	    <th>Coin</th>

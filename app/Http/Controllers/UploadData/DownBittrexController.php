@@ -20,12 +20,8 @@ class DownBittrexController extends BaseDataController
     			PriceBittrex::updateOrCreate(['coin_id'=>$key->coin_id, 'coin_id'=>$key->coin_id], ['High'=>$ListCoins['High'],'Low'=>$ListCoins['Low'],'Last'=>$ListCoins['Last']]);
     		}
     	}
+        $this->PriceUsdBtc((new PriceBittrex));
     	
-
-
-
-
-
     	return 1;
     }
 }

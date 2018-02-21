@@ -46,6 +46,8 @@ class DownYobitController extends BaseDataController
                 }
             }
         }
+        $this->PriceUsdBtc((new PriceYobit));
+        
     	return 1;
     }
 

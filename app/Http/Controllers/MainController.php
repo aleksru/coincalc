@@ -47,8 +47,8 @@ class MainController extends Controller
                         'rate' => $value[0],
                         'encrypt'=> Algoritm::find($key[1])->name,
                         'last_max_price' => $this->RecorsionByNull($value[1]->getLastPrices()->max()),
-                        'avg_price' => $value[1]->getAvgPrices(), 
-                        'avg_profit' => round($value[0]*$value[1]->getAvgPrices()*$price_btc, 2), 
+                        'avg_price' => $this->RecorsionByNull($this->RecorsionBcint($value[1]->getAvgPrices())), 
+                        'avg_profit' => round($value[2]*$value[1]->getAvgPrices()*$price_btc, 2), 
                         'max_24_profit' => round($value[1]->getOneMaxPrice()*$value[0]*$price_btc, 2), 
                         'max_last_profit' => round($value[1]->getLastPrices()->max()*$value[0]*$price_btc, 2),
                         'max_last_profit_market'=> $value[1]->getLastPrices()->search($value[1]->getLastPrices()->max(), true)
@@ -56,11 +56,13 @@ class MainController extends Controller
                 }             
            }
         }
+
         $allCol = collect($allCol)->reject(function ($value, $key){
             return !$value['max_24_profit'] && !$value['avg_profit'];
             })->sortByDesc(function ($value, $key) {
                             return $value->get('max_last_profit');
                         });
+        //return 1;
         return $allCol = $allCol->toArray();  
     }
 
@@ -100,6 +102,11 @@ class MainController extends Controller
         }else{
             return $int;
         }
+    }
+
+    public function RecorsionBcint($int)
+    {   
+        return sprintf("%.9f", $int);
     }
 
 
@@ -161,15 +168,15 @@ class MainController extends Controller
     		$b = ($userhash)/($key->datacoin->nethash);
 	    	$h = 3600 / $key->datacoin->block_time;
 
-            $updateData = $key->datacoin->updated_at;
-            $updateYMD = explode( "-", (explode(' ', $updateData))[0]);
-            $updateH = explode( ":", (explode(' ', $updateData))[1]);
-            if(!$updateYMD[0] < date("Y") || !$updateYMD[1] < date("m") || !$updateYMD[2] < date("d")){
-                if($updateH[0] + 5 >= date("H")){
-                    $priceCoin = (new PriceController($key));
-                    $result[$key->datacoin->coin->name] = [round($key->datacoin->block_reward *$b*$h*24, 5), $priceCoin];
-                }
-                
+            //$updateData = $key->datacoin->updated_at;
+            //$updateYMD = explode( "-", (explode(' ', $updateData))[0]);
+            //$updateH = explode( ":", (explode(' ', $updateData))[1]);
+            //dump(time());
+            //dump(idate('U', strtotime("2018-02-22 08:05:34")));
+            if(time() <= idate('U', strtotime($key->datacoin->updated_at))+25200){
+                $priceCoin = (new PriceController($key));
+                $result[$key->datacoin->coin->name] = [round($key->datacoin->block_reward *$b*$h*24, 5), $priceCoin, 
+                                                        round($key->datacoin->block_reward24 *$b*$h*24, 5)];
             }
             
     	}

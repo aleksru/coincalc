@@ -34,7 +34,7 @@ class ResourseDataController extends BaseDataController
 				if(Cache::get($i)){
 					if($DataCoin = $this->DownloanJson(Cache::get($i))){
 						if($DataCoin['id']){
-	      					DataCoin::updateOrCreate(['coin_id' => $DataCoin['id'], 'coin_id' => $DataCoin['id']],['block_time' => (float)$DataCoin['block_time'],'block_reward' => $DataCoin['block_reward'], 'nethash' => $DataCoin['nethash']]);
+	      					DataCoin::updateOrCreate(['coin_id' => $DataCoin['id'], 'coin_id' => $DataCoin['id']],['block_time' => (float)$DataCoin['block_time'],'block_reward' => $DataCoin['block_reward'], 'block_reward24' => $DataCoin['block_reward24'],'nethash' => $DataCoin['nethash']]);
 	      					Cache::forget($i);
 	      				}
 					}else{

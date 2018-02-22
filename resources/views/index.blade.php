@@ -40,11 +40,13 @@
   <div id="100">
   <input type="submit" id="btn" style="width:250px; height: 60px; clear:both;"> 
   </div>
-  
 </form>
 
 <br/>
-<div id='res'></div>
+<div id="load"><img src="../public/picture/loading.gif" width="200px"> </div>
+
+<br/>
+<div id="res"></div>
 
 		
 </body>

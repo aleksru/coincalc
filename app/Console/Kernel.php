@@ -35,11 +35,11 @@ class Kernel extends ConsoleKernel
            // Задача завершена...
         // });
         //          ->hourly();
-        $schedule->job(new DownloadDataWhatToMine)->dailyAt('13:40')->withoutOverlapping();
-        $schedule->job(new DownloadDataBittrex)->hourlyAt(40)->withoutOverlapping();
-        $schedule->job(new DownloadDataCriptopia)->hourlyAt(40)->withoutOverlapping();
-        $schedule->job(new DownloadDataHitbtc)->hourlyAt(40)->withoutOverlapping();
-        $schedule->job(new DownloadDataYobit)->hourlyAt(40)->withoutOverlapping();
+        $schedule->job(new DownloadDataWhatToMine)->everyFiveMinutes()->withoutOverlapping();
+        $schedule->job(new DownloadDataBittrex)->everyTenMinutes()->withoutOverlapping();
+        $schedule->job(new DownloadDataCriptopia)->everyTenMinutes()->withoutOverlapping();
+        $schedule->job(new DownloadDataHitbtc)->everyTenMinutes()->withoutOverlapping();
+        $schedule->job(new DownloadDataYobit)->everyTenMinutes()->withoutOverlapping();
     }
 
     /**

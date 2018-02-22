@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class DataCoin extends Model
 {
-    protected $fillable = ['coin_id', 'block_time', 'block_reward', 'nethash'];
+    protected $fillable = ['coin_id', 'block_time', 'block_reward', 'block_reward24', 'nethash'];
     protected $table = 'datacoins';
 
 

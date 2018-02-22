@@ -18,6 +18,7 @@ class CreateTableDatacoins extends Migration
             $table->integer('coin_id');
             $table->decimal('block_time', 50, 25);
             $table->decimal('block_reward', 50, 25);
+            $table->decimal('block_reward24', 50, 25);
             $table->decimal('nethash', 50, 25);
             $table->timestamps();
         });

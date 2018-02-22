@@ -1,6 +1,7 @@
 body{
 font-size: 20px;
 font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+text-align:center;
 }
 input{
 width:80%;
@@ -19,6 +20,14 @@ border-radius: 15px;
 .encrypt{
 
 }
+#res{
+  display: none;
+}
+
+#load{
+  display: none;
+}
+
 #result {
     font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
     border-collapse: collapse;
@@ -27,7 +36,7 @@ border-radius: 15px;
 
 #result td, #result th {
     border: 1px solid #ddd;
-    padding: 8px;
+   
 }
 
 #result tr:nth-child(even){background-color: #f2f2f2;}
@@ -35,16 +44,15 @@ border-radius: 15px;
 #result tr:hover {background-color: #ddd;}
 
 #result th {
-    padding-top: 12px;
-    padding-bottom: 12px;
     text-align: left;
     background-color: #4CAF50;
-    color: white;
+    color: #4CAF50;
 }
 .enc {
     font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
     border-collapse: collapse;
-    width: 10%;
+    width: 150px;
+	
 	float:left;
 }
 
@@ -99,4 +107,49 @@ text-align:center;
 
 .header{
 cursor:pointer;
+}
+
+
+table.tablesorter {
+	font-size: 16px;
+	
+	width: 1024px;
+	border: 1px solid #000;
+}
+table.tablesorter th {
+	text-align: left;
+	padding: 5px;
+	background-color: #6E6E6E;
+}
+table.tablesorter td {
+	padding: 5px;
+}
+table.tablesorter .even {
+	background-color: #3D3D3D;
+}
+table.tablesorter .odd {
+	background-color: #6E6E6E;
+}
+table.tablesorter .header {
+	background-image: url(../picture/bg.png);
+	background-repeat: no-repeat;
+	border-left: 1px solid #FFF;
+	border-right: 1px solid #000;
+	border-top: 1px solid #FFF;
+	padding-left: 30px;
+	padding-top: 8px;
+	height: auto;
+}
+table.tablesorter .headerSortUp {
+	background-image: url(../picture/asc.png);
+	background-repeat: no-repeat;
+}
+table.tablesorter .headerSortDown {
+	background-image: url(../picture/desc.png);
+	background-repeat: no-repeat;
+}
+
+#load{
+width:100%;
+text-align:center;
 }

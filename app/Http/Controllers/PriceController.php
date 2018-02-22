@@ -58,10 +58,13 @@ class PriceController extends Controller
     public function getAvgPrices()
     {   
 
-        return collect([!$this->var->price->isEmpty()?$this->var->price[0]->Last:null, 
-                    !$this->var->priceHitbtc->isEmpty()?$this->var->priceHitbtc[0]->Last:null, 
-                    !$this->var->priceCriptopia->isEmpty()?$this->var->priceCriptopia[0]->Last:null,
-                    !$this->var->priceYobit->isEmpty()?$this->var->priceYobit[0]->Last:null])->filter()->avg();
+        return collect([
+                    !$this->var->price->isEmpty()?$this->var->price[0]->High:null, !$this->var->price->isEmpty()?$this->var->price[0]->Low:null,
+                    !$this->var->priceHitbtc->isEmpty()?$this->var->priceHitbtc[0]->High:null, !$this->var->priceHitbtc->isEmpty()?$this->var->priceHitbtc[0]->Low:null,
+                    !$this->var->priceCriptopia->isEmpty()?$this->var->priceCriptopia[0]->High:null, !$this->var->priceCriptopia->isEmpty()?$this->var->priceCriptopia[0]->Low:null,
+                    !$this->var->priceYobit->isEmpty()?$this->var->priceYobit[0]->High:null, !$this->var->priceYobit->isEmpty()?$this->var->priceYobit[0]->Low:null
+                ])->filter()->avg();
+
     }
 
     public function getOneMaxPrice()

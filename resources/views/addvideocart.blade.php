@@ -19,29 +19,16 @@
     
    </select></p>
 
-   	<p><select size="7" name="algoritm">
-	@foreach ($algoritm as $a)
-  	<option value={{ $a->id }}>{{ $a->name }}</option>
-	@endforeach
-    
-   </select></p>
+  <div class="encrypt">
+    @foreach ($algoritm as $a)
+    <table class=enc>
+     <tr><th>{{$a->algname}}</th></tr>
+     <tr><td><input type="number" step="any" class={{ $a->algid }} name= algenc/{{ $a->algid }}/{{ $a->encid }} value=''>{{$a->encname}}</td></tr>
+   </table>
+    @endforeach
+  <br clear="left">
+  </div>
 
-   <input type="number" step="any" name="numb"> HS<Br>
-
-   	<p><select size="7" name="hash">
-
-  	<option value=1>TH/s</option>
-  	<option value=2>GH/s</option>
-  	<option value=3>MH/s</option>
-  	<option value=4>kH/s</option>
-  	<option value=5>H/s</option>
-    
-    </select></p>
-
-
-
-
-	
 	<input type="submit" value="Сохранить">
 </form>
 

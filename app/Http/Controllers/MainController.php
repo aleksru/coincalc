@@ -7,10 +7,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Videocard;
 use App\Models\Algoritm;
 use App\Http\Controllers\PriceController;
-//use Illuminate\Support\Facades\Cache;
 use App\Models\Coin;
-//use App\Models\PriceBittrex;
-//use App\Models\DataCoin;
 use App\Models\Hashrate;
 
 
@@ -81,9 +78,9 @@ class MainController extends Controller
                 $getRates = Videocard::find($key)->hashrates;
                 foreach ($getRates as $rate) {
                     if(!array_key_exists($rate->id, $res)){
-                        $res[$rate->id] = round($this->math($rate->pivot->userhash, $rate->encryptrate_id, $reverse = True), 1)*$value;
+                        $res[$rate->id] = round($this->math($rate->pivot->userhash, $rate->encryptrate_id, $reverse = True), 2)*$value;
                     }else{
-                        $res[$rate->id] = $res[$rate->id] + round($this->math($rate->pivot->userhash, $rate->encryptrate_id, $reverse = True), 1)*$value;
+                        $res[$rate->id] = $res[$rate->id] + round($this->math($rate->pivot->userhash, $rate->encryptrate_id, $reverse = True), 2)*$value;
                     }
                 }
             }
@@ -168,12 +165,7 @@ class MainController extends Controller
     		$b = ($userhash)/($key->datacoin->nethash);
 	    	$h = 3600 / $key->datacoin->block_time;
 
-            //$updateData = $key->datacoin->updated_at;
-            //$updateYMD = explode( "-", (explode(' ', $updateData))[0]);
-            //$updateH = explode( ":", (explode(' ', $updateData))[1]);
-            //dump(time());
-            //dump(idate('U', strtotime("2018-02-22 08:05:34")));
-            if(time() <= idate('U', strtotime($key->datacoin->updated_at))+25200){
+            if(time() <= idate('U', strtotime($key->datacoin->updated_at))+3600){
                 $priceCoin = (new PriceController($key));
                 $result[$key->datacoin->coin->name] = [round($key->datacoin->block_reward *$b*$h*24, 5), $priceCoin, 
                                                         round($key->datacoin->block_reward24 *$b*$h*24, 5)];
@@ -186,48 +178,13 @@ class MainController extends Controller
     	return $result;
     }
 
-    // public function GetCoinsHash()
-    // {
-
-    // 	$geth = Videocard::find(2)->hashrates;
-    // 	//echo Videocard::find(2)->name.'<br>';
-    // 	//debug($geth);
-
-    // 	$getnumb = Videocard::find(2);
-    // 	debug($getnumb->hashrates);
-    // 	foreach($getnumb->hashrates as $rate){
-    // 		debug($rate->pivot->userhash);
-    // 	}
-
-
-
-
-    // 	return 1;
-    // }
-
-
-    // public function CheckCoinsAlg()
-    // {	
-    // 	$allaltm = App\Models\Algoritm::all();
-    	
-    // 	foreach($allaltm as $alg){
-    // 		echo '<h1>'.$alg->name.'</h1>'.'<br>'.'<br>';
-    // 		foreach($alg->coin as $coin){
-    // 			echo $coin->name.'<br>';
-    // 			debug($coin->name);
-    // 		}
-    // 	}
-
-    // 	return 1;
-    // }
 
 
     public function GetAddVideoCard($msg = '')
     {	
-    	//$allaltm = Algoritm::all();
-    	//$allVcard = Videocard::all();
+        $AlgEnc = DB::table('algoritms')->join('encryptrates', 'algoritms.encryptrate_id', '=', 'encryptrates.id')->select('algoritms.name as algname','algoritms.id as algid','encryptrates.id as encid' ,'encryptrates.name as encname')->get();
 
-    	return view('addvideocart', ['videocard' => Videocard::all(), 'title' => 'Add', 'algoritm' => Algoritm::all(), 'msg' => $msg]);
+    	return view('addvideocart', ['videocard' => Videocard::all(), 'title' => 'Add', 'algoritm' => $AlgEnc, 'msg' => $msg]);
     }
 
 /*
@@ -239,22 +196,16 @@ class MainController extends Controller
 
     public function PostAddVideoCard(Request $request)
     {	
-        if($request->videocart == null ||$request->algoritm == null || $request->numb == null || $request->hash == null){
+        if($request->videocart == null){
            return redirect()->route('addvideo');
         }
-
-        debug($request);
-        if($request->hash != 5){
-            if($request->hash == 4){$request->numb = $request->numb * 1000;}
-            if($request->hash == 3){$request->numb = $request->numb * 1000000;}
-            if($request->hash == 2){$request->numb = $request->numb * 1000000 * 1000;}
-            if($request->hash == 1){$request->numb = $request->numb * 1000000000000;}
+        foreach ($request->all() as $key => $value){
+            if(substr($key, 0, 6) == 'algenc' && !empty($value)){
+                $key = explode("/", $key);
+                Hashrate::firstOrCreate(['algoritm_id' => $key[1], 'videocard_id' => $request->videocart, 'userhash' => $this->math($value, $key[2])]);
+            }
         }
 
-        echo $request->numb;
-        Hashrate::firstOrCreate(['algoritm_id' => $request->algoritm, 'videocard_id' => $request->videocart, 'userhash' => $request->numb]); 
-
-
-    	return 1;
+        return redirect()->route('addvideo')->with('msg','OK');
     }
 }

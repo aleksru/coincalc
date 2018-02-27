@@ -15,15 +15,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-// Route::get('/test', function () {
-
-// 	$j = file_get_contents('https://whattomine.com/calculators.json');
-// 	$j = json_decode($j);
-// 	debug($j);
-//     return view('welcome');
-// });
-
-//Route::get(, ['ResourseDataController@UpWhatToMine', ])->name('site.main.index');
 
 Route::group(['prefix' => '/test','namespace' => 'UploadData'], function() {
 
